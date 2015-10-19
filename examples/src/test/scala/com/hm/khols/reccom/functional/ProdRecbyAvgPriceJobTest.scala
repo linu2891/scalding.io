@@ -18,6 +18,7 @@ import com.twitter.scalding.Tsv
 import com.hm.khols.reccom.ProdRecByPriceJob
 /**
  * Functional test case
+ * reccom by Avg price
  * @author wcbdd
  */
 @RunWith(classOf[JUnitRunner])
