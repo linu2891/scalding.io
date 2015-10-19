@@ -17,6 +17,7 @@ import com.twitter.scalding.Csv
 import com.twitter.scalding.Tsv
 import com.hm.khols.reccom.ProdRecByPriceJob
 /**
+ * Functional test case
  * @author wcbdd
  */
 @RunWith(classOf[JUnitRunner])
