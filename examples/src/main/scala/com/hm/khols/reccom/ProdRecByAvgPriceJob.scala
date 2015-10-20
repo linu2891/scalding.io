@@ -36,8 +36,9 @@ import cascading.pipe.Pipe
    val PROD_CATALOG_SCHEMA = List ('pid, 'brand,'style,'gender,'typ1,'typ2,'typ3,'color)
    val PROD_RECCOM_SCHEMA = List(Category, 'poducts)
    val PROD_AVGPRICE_CAT_SCHEMA = List(AvgPrice, PidOfProd,Category) 
+   val PROD_BY_CAT_SCHEMA = List('pid,'typ1,'typ2,'typ3)
    
-   
+   val RECCOM_BY_PRODUCT_SCHEMA = List('pid,'products)
    val OUTPUT_SCHEMA = List(Category, 'poducts) 
  
    
@@ -113,35 +114,45 @@ import com.twitter.scalding.{Dsl, RichPipe}
  * 
  *
  * INPUT_SCHEMA: prodCatalogSchema
- * OUTPUT_SCHEMA: prodCatalogSchema
+ * OUTPUT_SCHEMA: PROD_RECCOM_BY_PROD_SCHEMA
  */
-   def getCategoryByGender(gender:String): Pipe =
+   def getPidCategoryByGender(gender:String): Pipe =
   pipe 
   .filter('gender){ f:String => f == gender}
-   .project('pid,'typ1,'typ2,'typ3) 
+   .project(PROD_BY_CAT_SCHEMA) 
     
    
-   /**          
+ /**          
  * 
  *
  * INPUT_SCHEMA: prodCatalogSchema
  * OUTPUT_SCHEMA: prodCatalogSchema
  */
    def getCategoryFromCatalog: Pipe =
-  pipe 
+  pipe
+  .project(PROD_BY_CAT_SCHEMA)
   .map( ('typ1,'typ2,'typ3) -> 'category_){x:(String,String,String) => val(typ1,typ2,typ3) = x  //create category "typ1|typ2|typ3"
     s"$typ1|$typ2|$typ3"}
    .discard('typ1,'typ2,'typ3)
 
+   /**
+    * 
+    */
   def removeSelfRecomm: Pipe =
 
     pipe
-      .project('pid, 'poducts)
-      .map(('pid, 'poducts) -> ('pid, 'poducts)) { x: (String, String) =>
+      .project(RECCOM_BY_PRODUCT_SCHEMA)
+      .map((RECCOM_BY_PRODUCT_SCHEMA) -> (RECCOM_BY_PRODUCT_SCHEMA)) { x: (String, String) =>
         val (pid, poducts) = x
         filterProducts(pid, poducts)
       }
 
+   /**
+    * pid : product Id
+    * products : reccomended products for pid
+    * 
+    *  remove self reccom from products
+    */
   def filterProducts(pid: String, products: String): (String, String) = {
     if (products.contains(pid)) {
       var prodArray = products.split(",")

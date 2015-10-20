@@ -7,6 +7,10 @@ import com.twitter.scalding.Job
 import cascading.pipe.Pipe
 
 /**
+ * For every Men's prolduct in the product catalog, 
+ * come up with the list of recommended products based on category, 
+ * and filter out any potential self-recommendations from it.
+ * 
  * @author wcbdd
  */
 
@@ -20,8 +24,8 @@ class ReccomForMenByProd (args:Args) extends Job(args){
   
   val prodRecomPipe = Csv( args("prodRecommInput"),"," ,PROD_RECCOM_SCHEMA ).read 
   
-  val prodPipe = Csv( args("prodCatalogInput"),"," ,PROD_CATALOG_SCHEMA ).read
-  .getCategoryByGender(MALE)
+  val prodPipe = Csv( args("prodCatalogInput"), ",", PROD_CATALOG_SCHEMA). read
+  .getPidCategoryByGender(MALE)
   .getCategoryFromCatalog
   .joinWithSmaller('category_ -> 'category ,  prodRecomPipe)
   .removeSelfRecomm
