@@ -57,11 +57,15 @@ class RecForMenByProdJobTransSpec extends FlatSpec with ShouldMatchers with Tupl
       List(("111","222,777,111") ,
            ("222","111,222,777") ) withSchema RECCOM_BY_PRODUCT_SCHEMA
     } When {
-      pipe: RichPipe => pipe.getReccomByProd     
+      pipe: RichPipe => pipe.removeSelfRecomm     
 
     } Then {
       buffer: mutable.Buffer[(String, String)] =>        
-          buffer.toList  shouldEqual (List( ("111","222,777"),(("222","111,777"))) )       
+          buffer.toList  shouldEqual (List( 
+                                            ("111","222,777"),
+                                            ("222","111,777")
+                                           ) 
+                                      )       
     }
   }
   

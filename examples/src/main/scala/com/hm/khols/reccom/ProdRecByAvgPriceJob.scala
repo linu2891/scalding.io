@@ -38,7 +38,7 @@ import cascading.pipe.Pipe
    val PROD_AVGPRICE_CAT_SCHEMA = List(AvgPrice, PidOfProd,Category) 
    val PROD_BY_CAT_SCHEMA = List('pid,'typ1,'typ2,'typ3)
    
-   val RECCOM_BY_PRODUCT_SCHEMA = List('pid,'products)
+   val RECCOM_BY_PRODUCT_SCHEMA = List('pid,'poducts)
    val OUTPUT_SCHEMA = List(Category, 'poducts) 
  
    
@@ -134,6 +134,7 @@ import com.twitter.scalding.{Dsl, RichPipe}
   .map( ('typ1,'typ2,'typ3) -> 'category_){category:(String,String,String) => val(typ1,typ2,typ3) = category  //create category "typ1|typ2|typ3"
     s"$typ1|$typ2|$typ3"}
    .discard('typ1,'typ2,'typ3)
+   
 
    /**
     * 
@@ -142,6 +143,7 @@ import com.twitter.scalding.{Dsl, RichPipe}
 
     pipe
       .project(RECCOM_BY_PRODUCT_SCHEMA)
+      .debug
       .map((RECCOM_BY_PRODUCT_SCHEMA) -> (RECCOM_BY_PRODUCT_SCHEMA)) { tuple: (String, String) =>
         val (pid, poducts) = tuple
         filterProducts(pid, poducts)

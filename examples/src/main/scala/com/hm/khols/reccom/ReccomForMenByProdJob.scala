@@ -22,13 +22,13 @@ class ReccomForMenByProd (args:Args) extends Job(args){
   import ProdReccomPipeTransformation._  
   import UtilsConstant._
   
-  val prodRecomPipe = Csv( args("prodRecommInput"),"," ,PROD_RECCOM_SCHEMA ).read 
+  val prodRecomPipe : Pipe = Csv( args("prodRecommInput"),"," ,PROD_RECCOM_SCHEMA ).read 
   
-  val prodPipe = Csv( args("prodCatalogInput"), ",", PROD_CATALOG_SCHEMA). read
+  val prodPipe : Pipe = Csv( args("prodCatalogInput"), ",", PROD_CATALOG_SCHEMA). read
   .getPidCategoryByGender(MALE)
   .getCategoryFromCatalog
   .joinWithSmaller('category_ -> 'category ,  prodRecomPipe)
   .removeSelfRecomm
-  .write(Tsv( args("output")))
+  .write(Tsv( args("reccomByProdOutput")))
   
 }

@@ -28,6 +28,16 @@ object TestData{
                                   ("adc","",11) 
                             
                            )
+                           
+
+  val prodCatalogData =  List(
+                                  (111,"LEVIS","style","MALE","CLOTHING","FORMALS","SHIRT","BLUE"),
+                                  (222,"LEVIS","style","MALE","CLOTHING","FORMALS","SHIRT","BLACK"),
+                                  (333,"NIKE","style","MALE","FOOTWARE","CASUALS","SHOES","BLUE"),
+                                  (444,"NIKE","style","FEMALE","FOOTWARE","CASUALS","SHOES","PINK"),
+                                  (777,"LEVIS","style","MALE","CLOTHING","FORMALS","SHIRT","GREEN")                           
+                                                              
+                             )                       
                           
   /**
    * Output For Jobs                          
@@ -38,4 +48,11 @@ object TestData{
                                    ("CLOTHING|FORMALS|TROUSERS", "444"),
                                    ("FOOTWARE|CASUALS|SHOES","333")
                               )
+                              
+  val prodReccomForMenByProdRes =  List(
+                                   ("111", "222,777"),
+                                   ("222", "111,777"),
+                                   ("777", "111,222"),
+                                   ("333", "")
+                              )                        
 }
