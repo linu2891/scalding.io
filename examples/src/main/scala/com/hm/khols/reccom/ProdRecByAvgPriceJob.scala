@@ -80,7 +80,7 @@ import com.twitter.scalding.{Dsl, RichPipe}
  */
  def calProdAvgPrice : Pipe =
   pipe        
-  .map((MaxPrice, MinPrice)->(AvgPrice)) {x:(String,String) => val(maxPrice,minPrice) = x 
+  .map((MaxPrice, MinPrice)->(AvgPrice)) {priceTuple:(String,String) => val(maxPrice,minPrice) = priceTuple 
     ((( toDouble(maxPrice) + toDouble(minPrice))/2))   
     }.project(PidOfProd,AvgPrice)
     
@@ -131,7 +131,7 @@ import com.twitter.scalding.{Dsl, RichPipe}
    def getCategoryFromCatalog: Pipe =
   pipe
   .project(PROD_BY_CAT_SCHEMA)
-  .map( ('typ1,'typ2,'typ3) -> 'category_){x:(String,String,String) => val(typ1,typ2,typ3) = x  //create category "typ1|typ2|typ3"
+  .map( ('typ1,'typ2,'typ3) -> 'category_){category:(String,String,String) => val(typ1,typ2,typ3) = category  //create category "typ1|typ2|typ3"
     s"$typ1|$typ2|$typ3"}
    .discard('typ1,'typ2,'typ3)
 
@@ -142,16 +142,16 @@ import com.twitter.scalding.{Dsl, RichPipe}
 
     pipe
       .project(RECCOM_BY_PRODUCT_SCHEMA)
-      .map((RECCOM_BY_PRODUCT_SCHEMA) -> (RECCOM_BY_PRODUCT_SCHEMA)) { x: (String, String) =>
-        val (pid, poducts) = x
+      .map((RECCOM_BY_PRODUCT_SCHEMA) -> (RECCOM_BY_PRODUCT_SCHEMA)) { tuple: (String, String) =>
+        val (pid, poducts) = tuple
         filterProducts(pid, poducts)
       }
 
    /**
-    * pid : product Id
-    * products : reccomended products for pid
+    * pid : product Id (111)
+    * products : reccomended products for pid (111 -> "111,222,777")
     * 
-    *  remove self reccom from products
+    *  remove self reccom (111 -> 111)from products
     */
   def filterProducts(pid: String, products: String): (String, String) = {
     if (products.contains(pid)) {
@@ -195,7 +195,7 @@ import ProdReccomPipeTransformation._
   .getTopProdsByAvgPrice(TOP) 
     
  
-  .write(Tsv( args("output") ))
+  .write(Tsv( args("prodRecByPriceOutput") ))
       
  
 }

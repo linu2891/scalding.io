@@ -29,15 +29,16 @@ class ProdRecbyAvgPriceJobTest extends FlatSpec with ShouldMatchers with TupleCo
     JobTest(classOf[ProdRecByPriceJob].getName)
       .arg("prodRecommInput", "prodRecommInput")
       .arg("prodPriceInput", "prodPriceInput")
-      .arg("output", "output")
+      .arg("prodRecByPriceOutput", "prodRecByPriceOutput")
       .arg("errorReccomRecords", "errorReccomRecords")
       .arg("errorPriceRecords", "errorPriceRecords")
       .source(Csv("prodRecommInput", ",", PROD_RECCOM_SCHEMA), prodReccomData)
       .source(Csv("prodPriceInput", ",", PROD_PRICE_SCHEMA), prodPriceData)
       
-      .sink(Tsv("output")) {
+      .sink(Tsv("prodRecByPriceOutput")) {
         buffer: mutable.Buffer[(String, String)] =>
-          buffer.toList shouldEqual prodReccomResult
+          buffer.toList shouldEqual prodReccomResult        
+          
       }
       .sink(Tsv("errorReccomRecords")) {
         buffer: mutable.Buffer[(String, String)] =>
@@ -48,6 +49,7 @@ class ProdRecbyAvgPriceJobTest extends FlatSpec with ShouldMatchers with TupleCo
           buffer.toList.size == 1
       }
       .run
+      .finish
   }
   
 }
