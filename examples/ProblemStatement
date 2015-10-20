@@ -1,0 +1,7 @@
+Explain the problem statement
+
+1.	For every Men's product in the product catalog, come up with the list of recommended products based on category,
+    and filter out any potential self-recommendations from it.
+
+2.	Re-rank the category-based recommendations based on price (defined as avg. of min/max  either one nullable) asc., 
+    and retain only upto top N (say, N = 5) recommendations.
