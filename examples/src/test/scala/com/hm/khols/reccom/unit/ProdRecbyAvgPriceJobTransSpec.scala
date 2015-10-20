@@ -52,7 +52,7 @@ class ProdRecbyAvgPriceJobTransSpec extends FlatSpec with ShouldMatchers with Tu
   "Top 2 recoomd " should "give top reccom based on avg price" in {
 
     Given {    
-      List(("2150.227","111","CLOTHING|FORMALS|SHIRT"),("2500","222","CLOTHING|FORMALS|SHIRT")) withSchema PROD_AVGPRICE_SCHEMA
+      List(("2150.227","111","CLOTHING|FORMALS|SHIRT"),("2500","222","CLOTHING|FORMALS|SHIRT")) withSchema PROD_AVGPRICE_CAT_SCHEMA
     } When {
       pipe: RichPipe => pipe.getTopProdsByAvgPrice(top = 2)     
 

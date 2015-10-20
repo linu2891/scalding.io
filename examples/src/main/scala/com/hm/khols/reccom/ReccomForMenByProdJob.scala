@@ -16,11 +16,12 @@ class ReccomForMenByProd (args:Args) extends Job(args){
 
   import schemas._
   import ProdReccomPipeTransformation._  
+  import UtilsConstant._
   
   val prodRecomPipe = Csv( args("prodRecommInput"),"," ,PROD_RECCOM_SCHEMA ).read 
   
   val prodPipe = Csv( args("prodCatalogInput"),"," ,PROD_CATALOG_SCHEMA ).read
-  .getCategoryByGender("MALE")
+  .getCategoryByGender(MALE)
   .getCategoryFromCatalog
   .joinWithSmaller('category_ -> 'category ,  prodRecomPipe)
   .removeSelfRecomm

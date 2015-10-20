@@ -23,6 +23,10 @@ import cascading.pipe.Pipe
   val MaxPrice = "maxprice"
   val MinPrice = "minprice"
   val AvgPrice = "avgPrice"
+  val Category = "category"
+  
+  val MALE = "MALE"
+  val TOP = 3;
 }
 
  import UtilsConstant._
@@ -30,13 +34,13 @@ import cascading.pipe.Pipe
    
    val PROD_PRICE_SCHEMA = List(PidOfProd,MaxPrice, MinPrice)
    val PROD_CATALOG_SCHEMA = List ('pid, 'brand,'style,'gender,'typ1,'typ2,'typ3,'color)
-   val PROD_RECCOM_SCHEMA = List('category, 'poducts)
-   val PROD_AVGPRICE_SCHEMA = List('avgPrice, PidOfProd,'category) 
+   val PROD_RECCOM_SCHEMA = List(Category, 'poducts)
+   val PROD_AVGPRICE_CAT_SCHEMA = List(AvgPrice, PidOfProd,Category) 
    
    
-   val OUTPUT_SCHEMA = List('category, 'poducts) 
+   val OUTPUT_SCHEMA = List(Category, 'poducts) 
  
-   val TOP = 3;
+   
    
 }
 
@@ -47,11 +51,11 @@ trait ProdReccomPipeTransformation {
   
 import com.twitter.scalding.{Dsl, RichPipe}
 
-import scala.language.implicitConversions
+ import scala.language.implicitConversions
  import Dsl._
  import StringUtils._
-
-
+ import schemas._
+  
   def pipe: Pipe
   
 /**          
@@ -64,7 +68,7 @@ import scala.language.implicitConversions
  def getReccomByProd : Pipe =
   pipe 
   .flatMap('poducts -> 'pidRecomm){recommednedProdLst:String => recommednedProdLst.split(",")}
-  .project('category,'pidRecomm)
+  .project(Category,'pidRecomm)
   
   
  /**
@@ -75,27 +79,35 @@ import scala.language.implicitConversions
  */
  def calProdAvgPrice : Pipe =
   pipe        
-  .map((MaxPrice, MinPrice)->('avgPrice)) {x:(String,String) => val(maxPrice,minPrice) = x 
+  .map((MaxPrice, MinPrice)->(AvgPrice)) {x:(String,String) => val(maxPrice,minPrice) = x 
     ((( toDouble(maxPrice) + toDouble(minPrice))/2))   
     }.project(PidOfProd,AvgPrice)
     
   
-    
+  /**
+     * Joins with reccom schema to add category to avgprice
+     *
+     * Input schema: PROD_PRICE_SCHEMA
+     * Recomm schema: RECCOM_SCHEMA
+     * Output schema: PROD_AVGPRICE_CAT_SCHEMA
+     */
+    def addReccomsToProducts(reccomPipe: Pipe) = 
+      pipe.joinWithSmaller(PidOfProd -> 'pidRecomm,  reccomPipe ).project(PROD_AVGPRICE_CAT_SCHEMA)   
 
-  
+       
   
 /**          
- *
- *
+ * Sort products by average price and and retain only upto top N
+ * and create new reccom from avg price  
  * INPUT_SCHEMA: PROD_RECCOM_SCHEMA
  * OUTPUT_SCHEMA: RECCOM_BY_PRODUCT_SCHEMA
  */
  def getTopProdsByAvgPrice(top: Int) : Pipe =
   pipe 
-  .project('avgPrice,PidOfProd,'category)   
-   .groupBy('category) { _.sortedReverseTake[(Double,String)](( 'avgPrice,PidOfProd) -> 'top, top) } 
+    
+   .groupBy(Category) { _.sortedReverseTake[(Double,String)](( AvgPrice,PidOfProd) -> 'top, top) } 
    .map('top -> 'pidList){ topList : List[(Double,String)] => topList.foldLeft("")((accum,tuple) => if(accum.isEmpty())tuple._2; else accum +","+tuple._2 )}
-   .project('category,'pidList)
+   .project(Category,'pidList)
      
  /**          
  * 
@@ -166,7 +178,8 @@ import ProdReccomPipeTransformation._
 
   .calProdAvgPrice  .addTrap(Tsv( args("errorPriceRecords")))   
    
-  .joinWithSmaller(PidOfProd -> 'pidRecomm,  recomPipe )                                                               
+     
+  .addReccomsToProducts(recomPipe)
  
   .getTopProdsByAvgPrice(TOP) 
     
