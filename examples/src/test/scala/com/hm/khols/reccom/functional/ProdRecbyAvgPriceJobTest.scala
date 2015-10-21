@@ -43,9 +43,12 @@ class ProdRecbyAvgPriceJobTest extends FlatSpec with ShouldMatchers with TupleCo
           //print the o/p on console
           println("\n\n")
           println("\t \t \t \t \t \t Input \n\n")            
-           println(prodPriceData); println("\n\n" )
+          println("product price ")
+          println(prodPriceData); println("\n\n" )
+          println("reccomendations ")
           println(prodReccomData)
           println("\n\n\t \t \t \t \t \t Output \n\n")
+          println("reccomendations by products based on price ")
           println(buffer.toList)
           
       }
