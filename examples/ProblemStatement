@@ -3,5 +3,15 @@ Explain the problem statement
 1.	For every Men's product in the product catalog, come up with the list of recommended products based on category,
     and filter out any potential self-recommendations from it.
 
+Sol =   
+    Job      			   : 		 ReccomForMenByProdJob.scala            Url : https://github.com/linu2891/scalding.io/blob/master/examples/src/main/scala/com/hm/khols/reccom/ReccomForMenByProdJob.scala
+    Test case (Functional) :         ReccomForMenByProdJobTest.scala        Url : https://github.com/linu2891/scalding.io/blob/master/examples/src/test/scala/com/hm/khols/reccom/functional/ReccomForMenByProdJobTest.scala
+    Test case (unit)	   :		 RecForMenByProdJobTransSpec.scala	 	Url : https://github.com/linu2891/scalding.io/blob/master/examples/src/test/scala/com/hm/khols/reccom/unit/RecForMenByProdJobTransSpec.scala
+
 2.	Re-rank the category-based recommendations based on price (defined as avg. of min/max  either one nullable) asc., 
     and retain only upto top N (say, N = 5) recommendations.
+    
+Sol =   
+    Job      			   : 		 ProdRecByAvgPriceJob.scala             Url : https://github.com/linu2891/scalding.io/blob/master/examples/src/main/scala/com/hm/khols/reccom/ProdRecByAvgPriceJob.scala
+    Test case (Functional) :         ProdRecbyAvgPriceJobTest.scala			Url : https://github.com/linu2891/scalding.io/blob/master/examples/src/test/scala/com/hm/khols/reccom/functional/ProdRecbyAvgPriceJobTest.scala
+    Test case (unit)	   :		 ProdRecbyAvgPriceJobTransSpec.scala	Url	: https://github.com/linu2891/scalding.io/blob/master/examples/src/test/scala/com/hm/khols/reccom/unit/RecForMenByProdJobTransSpec.scala
