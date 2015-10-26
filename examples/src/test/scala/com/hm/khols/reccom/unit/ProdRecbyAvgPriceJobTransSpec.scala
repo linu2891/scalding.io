@@ -5,9 +5,11 @@ import com.pragmasoft.scaldingunit.TestInfrastructure
 import org.specs2.{mutable => mutableSpec}
 import com.twitter.scalding.RichPipe
 import scala.collection.mutable
-import com.hm.khols.reccom.{ProdReccomPipeTransformation,schemas}
+import com.hm.khols.reccom.{ProdReccomPipeTransformation,schemas,UtilsConstant}
+
 import schemas._
 import ProdReccomPipeTransformation._
+
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import org.scalatest.FlatSpec

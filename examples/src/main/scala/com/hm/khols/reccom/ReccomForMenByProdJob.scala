@@ -6,6 +6,8 @@ import com.twitter.scalding._
 import com.twitter.scalding.Job
 import cascading.pipe.Pipe
 
+
+
 /**
  * For every Men's prolduct in the product catalog, 
  * come up with the list of recommended products based on category, 
