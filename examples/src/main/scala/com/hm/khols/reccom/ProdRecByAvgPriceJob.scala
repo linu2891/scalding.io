@@ -86,14 +86,14 @@ import com.twitter.scalding.{Dsl, RichPipe}
     
   
   /**
-     * Joins with reccom schema to add category to avgprice
+     * Joins with reccom pipe 
      *
      * Input schema: PROD_PRICE_SCHEMA
      * Recomm schema: RECCOM_SCHEMA
      * Output schema: PROD_AVGPRICE_CAT_SCHEMA
      */
     def addReccomsToProducts(reccomPipe: Pipe) = 
-      pipe.joinWithSmaller(PidOfProd -> 'pidRecomm,  reccomPipe ).project(PROD_AVGPRICE_CAT_SCHEMA)   
+      pipe.joinWithLarger(PidOfProd -> 'pidRecomm,  reccomPipe ).project(PROD_AVGPRICE_CAT_SCHEMA)   
 
        
   
