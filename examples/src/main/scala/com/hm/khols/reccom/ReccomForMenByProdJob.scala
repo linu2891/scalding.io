@@ -29,7 +29,7 @@ class ReccomForMenByProd (args:Args) extends Job(args){
   val prodPipe : Pipe = Csv( args("prodCatalogInput"), ",", PROD_CATALOG_SCHEMA). read
   .getPidCategoryByGender(MALE)
   .getCategoryFromCatalog
-  .joinWithSmaller('category_ -> 'category ,  prodRecomPipe)
+  .joinWithLarger('category_ -> 'category ,  prodRecomPipe)
   .removeSelfRecomm
   .write(Tsv( args("reccomByProdOutput")))
   
