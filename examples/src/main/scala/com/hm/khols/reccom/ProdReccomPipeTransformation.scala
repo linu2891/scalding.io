@@ -152,17 +152,12 @@ import com.twitter.scalding.{Dsl, RichPipe}
     * 
     *  remove self reccom (111 -> 111)from products
     */
-  def filterProducts(pid: String, products: String): (String, String) = {
-    if (products.contains(pid)) {
-      var prodArray = products.split(",")
-      val b = prodArray.filter(!_.contains(pid))
-
-      val newProducts = b.mkString(",")
-      (pid, newProducts)
-    } else
-      (pid, products)
-  }
+  def filterProducts(pid: String, products: String): (String, String) = {       
+     
+     val newProdList = products.split(",").filter(_ != pid)
+     (pid, newProdList.mkString(",")) 
   
+  }
 }
 
 
