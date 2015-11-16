@@ -154,7 +154,7 @@ import com.twitter.scalding.{Dsl, RichPipe}
     */
   def filterProducts(pid: String, products: String): (String, String) = {       
      
-     val newProdList = products.split(",").filter(_ != pid)
+     val newProdList = products.split(",").filter( _ != pid )
      (pid, newProdList.mkString(",")) 
   
   }
